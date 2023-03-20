@@ -297,4 +297,58 @@ window.addEventListener('DOMContentLoaded', () => {
   fetch('http://localhost:3000/menu')
     .then((data) => data.json())
     .then((res) => console.log(res));
+
+  //Slider
+  //1. query, index  = 1, (total, current)-paste num at website;
+  //2. init showSlides(index)
+  //2.1 if slides.len < 10 total.textCont 0slides.len slides.len
+  //3. showSlides(n) index += n if>len -> 1 if<1 -> len each -> hide slide[index] -> show
+  //3.1 if slides.len < 10 total.textCont 0slideIndex else slideIndex
+  //4. plusSlides(n)
+  //5. prev -> click showSlides(-1) next -> click showSlides(1)
+  const slides = document.querySelectorAll('.offer__slide'),
+    prev = document.querySelector('.offer__slider-prev'),
+    next = document.querySelector('.offer__slider-next'),
+    total = document.querySelector('#total'),
+    current = document.querySelector('#current');
+  let slideIndex = 1;
+
+  showSlides(slideIndex);
+
+  if (slides.length < 10) {
+    total.textContent = `0${slides.length}`;
+  } else {
+    total.textContent = slides.length;
+  }
+
+  function showSlides(n) {
+    if (n > slides.length) {
+      slideIndex = 1;
+    }
+
+    if (n < 1) {
+      slideIndex = slides.length;
+    }
+
+    slides.forEach((item) => (item.style.display = 'none'));
+
+    slides[slideIndex - 1].style.display = 'block';
+
+    if (slides.length < 10) {
+      current.textContent = `0${slideIndex}`;
+    } else {
+      current.textContent = slideIndex;
+    }
+  }
+
+  function plusSlides(n) {
+    showSlides((slideIndex += n));
+  }
+
+  prev.addEventListener('click', () => {
+    plusSlides(-1);
+  });
+  next.addEventListener('click', () => {
+    plusSlides(1);
+  });
 });
